@@ -27,12 +27,11 @@ sender_email = os.environ.get("EMAIL_USER")
 sender_password = os.environ.get("EMAIL_PASS")
 
 # Google OAuth client file
-path_to_project = "/home/FireStorm444/prasadam/"
-GOOGLE_CLIENT_SECRETS_FILE = path_to_project + "client_secret.json"
+GOOGLE_CLIENT_SECRETS_FILE = "/etc/secrets/client_secret.json"
 
 # Initialize Firebase
 try:
-    cred = credentials.Certificate(path_to_project + "firebase_key.json")
+    cred = credentials.Certificate("/etc/secrets/firebase_key.json")
     firebase_admin.initialize_app(cred)
     db = firestore.client()
 except Exception as e:
