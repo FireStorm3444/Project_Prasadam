@@ -1,0 +1,148 @@
+/* landing_page.css — minimal overrides, inherit base styles from global.css */
+@import url('global.css');
+
+:root {
+  --brand: #e74c3c;
+  --muted: #666;
+}
+
+/* Header specific adjustments for landing page */
+.lp-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #fff;
+  border-bottom: 1px solid #f0e6e3;
+}
+
+.lp-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lp-logo img {
+  height: 36px;
+}
+
+.lp-nav {
+  display: flex;
+  gap: 18px;
+}
+
+.lp-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 8px 6px;
+}
+
+.lp-cta {
+  display: flex;
+  gap: 10px;
+}
+
+/* Hero section */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 30px 12px;
+  min-height: 40vh;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-inner h1 {
+  font-size: 40px;
+  margin: 0 auto;
+  color: #222;
+}
+
+.tag {
+  color: var(--muted);
+  max-width: 620px;
+}
+
+.hero-media {
+  background-image: linear-gradient(120deg, rgba(231,76,60,0.06), rgba(39,174,96,0.03)), url('/static/LOGO 4.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 320px;
+    width: 320px;
+  border-radius: 12px;
+}
+
+/* Section cards and counters — keep lightweight overrides only */
+.section {
+  padding: 24px;
+  background: #fff;
+  margin: 30px auto; /* center horizontally */
+  border-radius: 12px;
+  max-width: 1000px;
+}
+
+.section h2 {
+    margin-top: 0;
+    color: #e74c3c;
+}
+
+.counters {
+  display: flex;
+  gap: 12px;
+  justify-content: center; /* center counters */
+  flex-wrap: wrap;
+}
+
+.counter {
+  flex: 1;
+  min-width: 150px;
+  background: #fff;
+  padding: 18px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.cards {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center; /* center cards */
+}
+
+.card,
+.col,
+.step {
+  flex: 1;
+  min-width: 240px;
+  background: #fff;
+  padding: 18px;
+    margin: 10px;
+  border-radius: 8px;
+  border: 1px solid #f3e6e5;
+}
+
+.lp-footer {
+    max-height: 100px;
+    margin: 50px;
+}
+
+.lp-footer img {
+    height: 150px;
+    width: auto;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  .lp-nav { display: none; }
+  .hero-media { height: 220px; }
+  .cols { grid-template-columns: 1fr; }
+  .steps { flex-direction: column; }
+  .counters { flex-direction: column; }
+  .cards { flex-direction: column; }
+}
+
+/* End of landing page specific overrides */

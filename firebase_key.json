@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "foodwastage-1fd2e",
+  "private_key_id": "4538e1c4766b0829558e45d8738b07b4ceaf1d55",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDGLuEcpl49QozQ\n3K53sfiEYESQjsnQaT4DUvGTn1L/+64B9UCuaXSXee7ffcgRhYIXo3A58urtKVLl\nHhtq1l2a23Hmi3yK5720KXBKKo52f0MZp2FYAQc65SuFdpkRjUO3o+QhzWCTepm6\n+oLvNv55rKAj5qE5ysl77VyCJpQo+qwD04DesYc08Jp3j6o5h5/RVzpQisiAB1Fq\nlVHQz42/54YvGTeRSjX2t5xAgGxT7EiWhKVNKihe60eYXoku9kCojOx+Rm4h7Kmi\nZBfnr3E3Ilr4HBGxMBjf/7BViUaoSDryGu2btxDNoZXyLFRq/D7QfeZ0MZeE1LwO\nV7WcX2czAgMBAAECggEAAZuwLSWKDqDNBOwPG/hWvIRBEJQICs5MnlKvx40VOFYl\nFrqUJS/ErjuWdtVndTTwvE5enJArD3Rnyf73i/z9uQ74AQq3hQA8AT7ab8+hyxzE\nDgY8rpRVKBYwYNHe8ue2WY9Vf5Me3U0ZlQ0JWPWVe3LgjcoGTuWLwwF6Rn5+DBZE\nLojSqxJr+EBwxBIpJ/ZMeOTNQKGU2Wl1MQ30kAljWoiMUtDW+lzphtt7MUb2X980\nwenMQ+Au4xVhUNFaVPixwlESHCci5b0nLqyK3i0SDmvIK7rlFQ7RIep84bz2C7/o\nsXH1Xhg4JJjFo3vPgXcW4PBVaaNy7y3meDki6zZ+IQKBgQDwHwL0nL3MJGBntn6q\nFk+WIwYhZ4uM5CverRpGlWsq0Ia8Um9cZovz1pmk+iSBy0GoaLtE/Fe0C+esZuXM\nQZbaFkjyWQInyj22D0M1GRmdd1aUr/Sb3kBTMOWzmLgWTSDgPjLhsqCCoGNUE7Bb\nx7TGi6TcTSCGk+gm1gd/UQNG4wKBgQDTSecr72ZHsJIE323MYLagEaOJP9KFjXXf\n3S5mN6k6ogTRGZ/YqZe0Uwsq/tjbyXha5fxRKjEcxs1/wV9YWrr+TFqvhQoyFpN0\nSKV8sk89nA8TcSLt52VUr/VOj3M6/U46ws3zC6hlikmZ1trPGyVqMu806bVsfJrq\np4KXwDv/cQKBgQDn0ZjB3b0jJA9qsXZR8R4+3WtivpuslvB/l3Ehqcl/2TfrAk7+\nzwXYkFtfOhwarsehthLuBA0MBt5QxDqg2sWvoQol5qa9EXRImy2QSr4/FuKgw8sM\n3CIP7sokfJFk/mt58rKe0RxDYGLk3elKgmBVuqWcBl4bbxoWvFUapnTabwKBgCgm\ntR1uQvuAnF78rnrWLh5A+9jLHhBvD2VZPMYD8c7Ily29NtkPcVq9JTQodcFeidaM\nOeSapfaX+Nk8QAgkRcCpddpA5+0YyTCh1YDayaAlld/V8hNPk7wCLBWfwQAGvuT/\nu+9h2cBiBRaM88vDltqVj0t41hclnrLU3kZEK6KhAoGBAOI5zqd8FwnAFfZenBL6\no36YsqsgOugORDJabyCg2GCUSA2qV9TysGNFWlt9tVSzA5fR/72rr5Jwq45RyjXU\nbDbVlkmBzwp4iC+TFagd3ZksovRVMBYBeQBcOUuVXpgb0MfQQ4XjZ+JeF1XDsXJW\nGZy4mOaUo9D6jMdabdweqrJz\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@foodwastage-1fd2e.iam.gserviceaccount.com",
+  "client_id": "116327431714412468012",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40foodwastage-1fd2e.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

@@ -1,0 +1,286 @@
+.hero {
+  padding: 40px;
+  text-align: left;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.hero h2 {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.hero h2 span {
+  color: #ff6600;
+}
+
+.hero p {
+  font-size: 18px;
+  color: #5a5a5a;
+  margin-bottom: 30px;
+}
+
+.stats {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    text-align: center;
+}
+
+.stat {
+    margin: 10px;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    text-align: left;
+    gap: 10px;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+}
+
+.stat img {
+    height: 75px;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.details p:first-child {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+.details p:last-child {
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+}
+
+/* -- Updated layout -- */
+.dashboard-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 40px 40px 40px;
+  max-width: 1200px;
+  margin: auto;
+  gap: 30px;
+}
+
+.left-column {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 25%;
+    gap: 10px;
+    flex: 0 0 200px;
+}
+
+.left-column img {
+    height: 200px;
+    width: auto;
+    bottom: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.middle-column {
+    width: 50%;
+    flex: 1;
+}
+
+.right-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    flex: 0 0 250px;
+    position: relative;
+}
+
+/* Image stack for 3D layered effect */
+.image-stack {
+  position: relative;
+  width: 200px;
+  height: 150px;
+}
+
+.base-image {
+  position: absolute;
+  bottom: -30px;
+  left: 175px;
+  height: 150px !important;
+  width: auto;
+  z-index: 1;
+}
+
+.overlay-image {
+  position: absolute;
+  top: 30px;
+  left: -100px !important;
+  height: 200px !important;
+  width: auto;
+  z-index: 2;
+}
+
+.dashboard-image {
+  height: 120px;
+  width: auto;
+}
+
+/* Button styling for new request */
+.new-request-btn {
+  display: block !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+  width: fit-content !important;
+  margin: 10px 0 !important;
+  text-align: center;
+}
+
+/* Enhanced Responsive Styles */
+@media (max-width: 1200px) {
+  .hero {
+    padding: 30px;
+  }
+
+  .dashboard-layout {
+    padding: 0 30px 30px 30px;
+  }
+
+  .hero h2 {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-layout {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .left-column {
+    flex: 0 0 100%;
+    width: 100%;
+    order: 3;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .middle-column {
+    flex: 0 0 100%;
+    width: 100%;
+    order: 1;
+  }
+
+  .right-column {
+    flex: 0 0 100%;
+    width: 100%;
+    order: 2;
+    margin-bottom: 20px;
+  }
+
+  .image-stack {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .overlay-image, .base-image {
+    position: static !important;
+    height: 120px !important;
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .hero h2 {
+    font-size: 32px;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  .dashboard-layout {
+    padding: 0 20px 20px 20px;
+  }
+
+  .stats {
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    flex: 0 0 calc(50% - 20px);
+    margin: 10px;
+    justify-content: center;
+  }
+
+  .new-request-btn {
+    width: 100% !important;
+    margin: 10px auto !important;
+  }
+
+  .left-column img {
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 15px;
+  }
+
+  .hero h2 {
+    font-size: 28px;
+  }
+
+  .hero p {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .dashboard-layout {
+    padding: 0 15px 15px 15px;
+  }
+
+  .stat {
+    flex: 0 0 100%;
+  }
+
+  .stat img {
+    height: 50px;
+  }
+
+  .details p:first-child {
+    font-size: 18px;
+  }
+
+  .details p:last-child {
+    font-size: 14px;
+  }
+
+  .left-column img {
+    height: 120px;
+  }
+
+  .overlay-image, .base-image {
+    height: 100px !important;
+  }
+}

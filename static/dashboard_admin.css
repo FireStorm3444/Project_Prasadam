@@ -1,0 +1,39 @@
+.main-content {
+    padding: 20px 40px;
+    max-width: 1400px;
+    margin: auto;
+}
+.table-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.btn-approve {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+.btn-approve:hover {
+    border-color: #28a745;
+    background-color: #fff;
+    color: #28a745;
+}
+.btn-reject {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+.btn-reject:hover {
+    border-color: #dc3545;
+    background-color: #fff;
+    color: #dc3545;
+}
+
+.requests h2 {
+    margin: 0;
+}
+select {
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+

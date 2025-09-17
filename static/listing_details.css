@@ -1,0 +1,343 @@
+/* Unified Listing Details Styles for all roles */
+
+/* Main Container Layout */
+.main-content {
+    max-width: 1000px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+.form-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* Status Section */
+.status-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.status-section > div {
+    flex: 1;
+}
+
+/* Status Badges */
+.status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.status.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status.claimed {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.status.assigned {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status.collected {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+/* Role-specific Info Sections */
+.driver-info,
+.donor-info,
+.recipient-info {
+    background-color: #f8f9fa;
+    padding: 15px;
+    min-width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.driver-info h4,
+.donor-info h4,
+.recipient-info h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.driver-details,
+.donor-details,
+.recipient-details {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.driver-details img,
+.donor-details img,
+.recipient-details img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.driver-details p,
+.donor-details p,
+.recipient-details p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+.driver-details p strong,
+.donor-details p strong,
+.recipient-details p strong {
+    color: #444;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.form-textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Disabled States */
+.form-select:disabled,
+.form-input:disabled,
+.form-textarea:disabled,
+.form-textarea[readonly],
+.form-input[readonly] {
+    background-color: #f8f9fa;
+    color: #333;
+    cursor: not-allowed;
+}
+
+/* Radio Groups */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+    margin: 0;
+}
+
+.radio-group input[type="radio"]:disabled + span {
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* Alert Messages */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 12px 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+/* Driver-specific Styles */
+.active-row {
+    background-color: #ffdf8e !important;
+}
+
+.active-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background: #ffcc66;
+    color: #5a3b00;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+/* Small Helpers */
+.form-small {
+    display: block;
+    color: #666;
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+    .form-container {
+        padding: 15px;
+    }
+
+    .status-section {
+        gap: 15px;
+    }
+
+    .donation-form {
+        padding: 15px;
+    }
+
+    .donation-form fieldset {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin: 16px auto;
+    }
+
+    .status-section {
+        flex-direction: column;
+    }
+
+    .driver-info,
+    .donor-info,
+    .recipient-info {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .driver-details img,
+    .donor-details img,
+    .recipient-details img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .donation-form fieldset {
+        padding: 12px;
+    }
+
+    .donation-form legend {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 0 10px;
+        margin: 10px auto;
+    }
+
+    .form-container {
+        padding: 12px;
+    }
+
+    .form-container h2 {
+        font-size: 18px;
+    }
+
+    .status {
+        padding: 4px 10px;
+        font-size: 0.8em;
+    }
+
+    .driver-info h4,
+    .donor-info h4,
+    .recipient-info h4 {
+        font-size: 1em;
+    }
+
+    .driver-details,
+    .donor-details,
+    .recipient-details {
+        gap: 10px;
+    }
+
+    .driver-details p,
+    .donor-details p,
+    .recipient-details p {
+        font-size: 0.85em;
+    }
+
+    .driver-details img,
+    .donor-details img,
+    .recipient-details img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .form-label {
+        font-size: 13px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .form-small {
+        font-size: 0.75em;
+    }
+
+    .donation-form fieldset {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    .active-badge {
+        padding: 3px 6px;
+        font-size: 11px;
+    }
+}

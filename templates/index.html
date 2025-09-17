@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prasadam - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard_donor.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Left Image Column -->
+        <div class="image-column">
+            <img src="{{ url_for('static', filename='A.png') }}" class="img-A" alt="Food sharing illustration">
+            <img src="{{ url_for('static', filename='B.png') }}" class="img-B" alt="Community helping">
+        </div>
+
+        <!-- Main Login Box -->
+        <div class="login-box">
+            <h2>Welcome to <span>Prasadam</span></h2>
+            <p class="subtitle">Share Food, Spread Joy - Login to continue</p>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages flashes">
+                        {% for message in messages %}
+                            <div class="alert alert-error">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Login Form -->
+            <form method="POST" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                
+                <button class="otp btn" type="submit">
+                    <span>Send OTP</span>
+                </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <!-- Google Sign-In Button -->
+            <a href="{{ url_for('login_google') }}" class="google-signin-link">
+                <button type="button" class="btn-google btn">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20" height="20">
+                    <span>Continue with Google</span>
+                </button>
+            </a>
+
+            <!-- Registration Link -->
+            <div class="auth-links">
+                <p>New to Prasadam? <a href="{{ url_for('register') }}" class="register-link">Create Account</a></p>
+            </div>
+        </div>
+
+        <!-- Right Image Column -->
+        <div class="image-column">
+            <img src="{{ url_for('static', filename='Thali.png') }}" class="img-food" alt="Traditional Indian Thali">
+            <img src="{{ url_for('static', filename='food.png') }}" class="img-Thali" alt="Delicious food">
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEgF29Wx-TYUBT1EyJ23aSMMqjRPNBLlo",
+            authDomain: "foodwastage-1fd2e.firebaseapp.com",
+            projectId: "foodwastage-1fd2e",
+            storageBucket: "foodwastage-1fd2e.firebasestorage.app",
+            messagingSenderId: "681162545150",
+            appId: "1:681162545150:web:efde385febd6d6c54312af",
+            measurementId: "G-678LDYGK8H"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const storage = firebase.storage();
+
+        // Basic form validation and UX improvements
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('.login-form');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            form.addEventListener('submit', function(e) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Sending OTP...</span>';
+                
+                // Re-enable button after 3 seconds to prevent permanent disable on error
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>Send OTP</span>';
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>
+    <title></title>

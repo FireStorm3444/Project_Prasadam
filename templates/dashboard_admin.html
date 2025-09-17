@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Prasadam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard_donor.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard_admin.css') }}">
+</head>
+<body>
+<header>
+    <div class="logo">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+      <h1>Prasadam - Admin Panel</h1>
+    </div>
+    <div class="profile">
+      <div class="profile-dropdown">
+        <img src="{{ profile_picture }}" alt="Profile Picture" class="profile-pic" onclick="toggleDropdown(event)">
+        <div class="dropdown-content" id="profileDropdown">
+          <a href="{{ url_for('profile') }}">Profile</a>
+          <a href="#" onclick="showNotImplemented()">Reports & Analytics</a>
+          <hr>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+      </div>
+    </div>
+</header>
+
+<main>
+    <section class="hero">
+      <h2>Welcome back, <span>{{ session.get('user_name','Admin') }}!</span></h2>
+      <p>Review and verify new NGOs to maintain platform quality.</p>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash-messages-home flashes">
+            {% for message in messages %}
+              <div class="alert-success">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      <div class="stats">
+        <div class="stat secondary-section">
+          <img src="{{ url_for('static', filename='images/3.png') }}" alt="Hotel">
+          <div class="details">
+            <p>150</p>
+            <p>Hotels Partnered</p>
+          </div>
+        </div>
+        <div class="stat secondary-section">
+          <img src="{{ url_for('static', filename='images/4.png') }}" alt="Meals">
+          <div class="details">
+            <p>150</p>
+            <p>Meals Collected</p>
+          </div>
+        </div>
+        <div class="stat secondary-section">
+          <img src="{{ url_for('static', filename='images/5.png') }}" alt="NGO">
+          <div class="details">
+            <p>150</p>
+            <p>NGOs Assisted</p>
+          </div>
+        </div>
+        <div class="stat secondary-section">
+          <img src="{{ url_for('static', filename='images/6.png') }}" alt="Food">
+          <div class="details">
+            <p>150</p>
+            <p>Food Distributed</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="dashboard-layout">
+      <!-- Left: No New Request button for admin -->
+      <div class="left-column">
+        <img src="{{ url_for('static', filename='images/bus.png') }}" alt="Delivery Bus" class="dashboard-image">
+      </div>
+
+      <!-- Middle: Unverified NGOs -->
+      <div class="middle-column primary-section">
+        <div class="requests">
+          <h3>Unverified NGOs</h3>
+          <div class="requests-table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>NGO Name</th>
+                  <th>Email</th>
+                  <th>Contact</th>
+                  <th>Address</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if unverified_ngos %}
+                  {% for ngo in unverified_ngos %}
+                    <tr>
+                      <td>{{ ngo.user_name or ngo.name }}</td>
+                      <td>{{ ngo.email }}</td>
+                      <td>{{ ngo.phone or 'Not provided' }}</td>
+                      <td>{{ ngo.address or 'Not provided' }}</td>
+                      <td class="table-actions">
+                        <form method="POST" action="{{ url_for('verify_user', user_id=ngo.id) }}">
+                          <button type="submit" class="btn btn-approve">Verify</button>
+                        </form>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr><td colspan="5" style="text-align:center; padding: 20px;">No NGOs are currently pending verification.</td></tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Images -->
+      <div class="right-column">
+        <div class="image-stack">
+          <img src="{{ url_for('static', filename='images/1.png') }}" alt="Food Item" class="dashboard-image overlay-image">
+          <img src="{{ url_for('static', filename='images/basket.png') }}" alt="Food Basket" class="dashboard-image base-image">
+        </div>
+      </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 Prasadam. All rights reserved. | Making a difference, one meal at a time.</p>
+</footer>
+
+<script>
+function showNotImplemented() { alert('This feature is not yet implemented.'); }
+function toggleDropdown(event) {
+  event.stopPropagation();
+  const dropdown = document.getElementById('profileDropdown');
+  dropdown.classList.toggle('show');
+}
+window.onclick = function(event) {
+  if (!event.target.matches('.profile-pic')) {
+    const dropdowns = document.getElementsByClassName('dropdown-content');
+    for (let i = 0; i < dropdowns.length; i++) {
+      const openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) openDropdown.classList.remove('show');
+    }
+  }
+}
+</script>
+</body>
+</html>

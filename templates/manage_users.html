@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users - Prasadam Admin</title>
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard_donor.css') }}">#}
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='manage_users.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            <h1>Prasadam</h1>
+        </div>
+        <div class="profile">
+            <a href="{{ url_for('admin_dashboard') }}" class="btn back-link">Admin Panel</a>
+            <div class="profile-dropdown">
+                <img src="{{ profile_picture or 'https://avatar.iran.liara.run/public/3' }}" alt="Profile Picture" class="profile-pic" onclick="toggleDropdown(event)">
+                <div class="dropdown-content" id="profileDropdown">
+                    <a href="{{ url_for('profile') }}">Profile</a>
+                    <a href="{{ url_for('manage_users') }}" class="active">Manage Users</a>
+                    <a href="#" onclick="showNotImplemented()">Reports & Analytics</a>
+                    <hr>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="manage-users-container">
+        <div class="page-header">
+            <h1 class="page-title">Manage Users</h1>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <form method="GET" style="display: flex; gap: 20px; align-items: end;">
+                <div class="filter-group">
+                    <label for="role">Filter by Role:</label>
+                    <select name="role" id="role" class="form-select" onchange="this.form.submit()">
+                        <option value="all" {{ 'selected' if role_filter == 'all' }}>All Roles</option>
+                        <option value="donor" {{ 'selected' if role_filter == 'donor' }}>Donors</option>
+                        <option value="admin" {{ 'selected' if role_filter == 'admin' }}>Admins</option>
+                        <option value="driver" {{ 'selected' if role_filter == 'driver' }}>Drivers</option>
+                        {% if is_super or ('super' in (session.get('role','')|lower)) %}
+                        <option value="super_admin" {{ 'selected' if role_filter == 'super_admin' }}>Super Admins</option>
+                        {% endif %}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="status">Filter by Status:</label>
+                    <select name="status" id="status" class="form-select" onchange="this.form.submit()">
+                        <option value="all" {{ 'selected' if status_filter == 'all' }}>All Status</option>
+                        <option value="active" {{ 'selected' if status_filter == 'active' }}>Active</option>
+                        <option value="inactive" {{ 'selected' if status_filter == 'inactive' }}>Inactive</option>
+                    </select>
+                </div>
+
+                <button type="button" onclick="window.location.href='{{ url_for('manage_users') }}'" class="btn btn-secondary">Clear Filters</button>
+            </form>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flashes">
+                    {% for message in messages %}
+                        <div class="alert-success">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Users Table -->
+        <div class="users-table-container primary-section">
+            <div class="users-count">
+                Showing {{ users|length }} user{{ 's' if users|length != 1 }}
+                {% if role_filter != 'all' or status_filter != 'all' %}
+                    (filtered)
+                {% endif %}
+            </div>
+
+            {% if users %}
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Verification</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <img src="{{ user.profile_picture or 'https://avatar.iran.liara.run/public/3' }}"
+                                             alt="Profile" class="user-avatar">
+                                        <div class="user-details">
+                                            <h4>{{ user.user_name or user.name or 'Unknown' }}</h4>
+                                            <p>{{ user.address or 'No address provided' }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.phone or 'Not provided' }}</td>
+                                <td>
+                                    <span class="role-badge {{ user.role or 'donor' }}">
+                                        {{ (user.role or 'donor').replace('_',' ').title() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="status-badge {{ user.status or 'active' }}">
+                                        {{ (user.status or 'active').title() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if user.get('is_verified') %}
+                                        <span class="status-badge active">Verified</span>
+                                    {% else %}
+                                        <span class="status-badge inactive">Not Verified</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="actions-cell">
+                                        {% if user.email == session.get('email') %}
+                                            <div class="self-warning">This is your account</div>
+                                        {% else %}
+                                            <!-- Status Toggle -->
+                                            {% if user.status != 'inactive' %}
+                                                <form method="POST" action="{{ url_for('update_user') }}" style="display: inline;">
+                                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                                    <input type="hidden" name="action" value="deactivate">
+                                                    <button type="submit" class="action-btn deactivate"
+                                                            onclick="return confirm('Are you sure you want to deactivate this user?')">
+                                                        Deactivate
+                                                    </button>
+                                                </form>
+                                            {% else %}
+                                                <form method="POST" action="{{ url_for('update_user') }}" style="display: inline;">
+                                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                                    <input type="hidden" name="action" value="activate">
+                                                    <button type="submit" class="action-btn activate">
+                                                        Activate
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+
+                                            <!-- Verify Button for Unverified NGOs -->
+                                            {% if not user.get('is_verified') and user.role == 'recipient' %}
+                                                <form method="POST" action="{{ url_for('verify_user', user_id=user.id) }}" style="display: inline;">
+                                                    <button type="submit" class="action-btn role">Verify</button>
+                                                </form>
+                                            {% endif %}
+
+                                            <!-- Role Change -->
+                                            <form method="POST" action="{{ url_for('update_user') }}" class="role-change-form">
+                                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                                <input type="hidden" name="action" value="change_role">
+                                                <select name="new_role" class="role-select" onchange="if(confirm('Are you sure you want to change this user\'s role?')) this.form.submit();">
+                                                    <option value="" disabled selected>Change Role</option>
+                                                    <option value="donor" {% if user.role == 'donor' %}disabled{% endif %}>Donor</option>
+                                                    <option value="driver" {% if user.role == 'driver' %}disabled{% endif %}>Driver</option>
+                                                    {% if is_super %}
+                                                    <option value="admin" {% if user.role == 'admin' %}disabled{% endif %}>Admin</option>
+                                                    <option value="super_admin" {% if user.role == 'super_admin' %}disabled{% endif %}>Super Admin</option>
+                                                    {% endif %}
+                                                </select>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="no-users-message">
+                    <p>No users found matching the selected filters.</p>
+                    <a href="{{ url_for('manage_users') }}" class="btn">View All Users</a>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <script>
+        function showNotImplemented() {
+            alert('This feature is not implemented yet.');
+        }
+        // Toggle the dropdown menu
+        function toggleDropdown(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('show');
+            event.stopPropagation();
+        }
+
+        // Close the dropdown if clicked outside
+        window.onclick = function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            if (!event.target.matches('.profile-pic')) {
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        }
+
+        function showNotImplemented() {
+            alert('This feature is not implemented yet.');
+        }
+    </script>
+</body>
+</html>

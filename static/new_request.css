@@ -1,0 +1,114 @@
+/* new_request.css - separated CSS for new request form */
+.main-content {
+    padding: 20px 40px;
+    max-width: 800px;
+    margin: auto;
+}
+
+.form-container {
+    padding-top: 20px;
+}
+
+.form-container h2 {
+    margin: 0;
+    color: #e74c3c;
+    text-align: center;
+}
+
+.donation-form {
+    padding: 30px;
+}
+
+.donation-form fieldset {
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    position: relative;
+    transition: border-color 0.2s;
+}
+
+.donation-form fieldset:hover {
+    border-color: #e74c3c;
+}
+
+.donation-form legend {
+    color: black;
+    font-weight: bold;
+    padding: 0 10px;
+    font-size: 16px;
+    transition: color 0.2s ease;
+}
+
+.donation-form fieldset:hover legend {
+    color: #e74c3c;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #fff;
+    color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Header styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    height: 40px;
+}
+
+.logo h1 {
+    color: #e74c3c;
+    margin: 0;
+    font-size: 24px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 12px;
+    border-radius: 6px;
+}

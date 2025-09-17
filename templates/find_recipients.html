@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find NGOs - Prasadam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='manage_users.css') }}">
+</head>
+<body>
+<header>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <h1>Prasadam</h1>
+    </div>
+    <div class="profile">
+        <a href="{{ url_for('home') }}" class="btn back-link">Dashboard</a>
+        <div class="profile-dropdown">
+            <img src="{{ profile_picture }}" alt="Profile Picture" class="profile-pic" onclick="toggleDropdown(event)">
+            <div class="dropdown-content" id="profileDropdown">
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('donation_history') }}">Donation History</a>
+                <a href="{{ url_for('find_recipients') }}">Find NGOs</a>
+                <a href="{{ url_for('manage_affiliations') }}">Manage Affiliations</a>
+                <a href="#" onclick="showNotImplemented()">Scheduled Donations</a>
+                <hr>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="manage-users-container">
+    <div class="page-header">
+        <h1 class="page-title">Find and Connect with NGOs</h1>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flashes">
+                {% for message in messages %}
+                    <div class="alert-success">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="users-table-container primary-section">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>NGO Name</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if recipients %}
+                    {% for recipient in recipients %}
+                        <tr>
+                            <td>
+                                <div class="user-info">
+                                    <img src="{{ recipient.profile_picture or 'https://avatar.iran.liara.run/public/3' }}"
+                                         alt="Profile" class="user-avatar">
+                                    <div class="user-details">
+                                        <h4>{{ recipient.user_name or recipient.name or 'Unknown' }}</h4>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ recipient.address or 'Not provided' }}</td>
+                            <td>
+                                {% if recipient.id in user_affiliations %}
+                                    <span class="status-badge active">Affiliated</span>
+                                {% elif recipient.id in pending_recipient_ids %}
+                                    <span class="status-badge pending">Request Sent</span>
+                                {% else %}
+                                    <form method="POST" action="{{ url_for('request_affiliation', recipient_id=recipient.id) }}">
+                                        <button type="submit" class="btn btn-primary">Connect</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="no-users-message">No verified NGOs found.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<script>
+function toggleDropdown(event) {
+    event.stopPropagation();
+    document.getElementById('profileDropdown').classList.toggle('show');
+}
+window.onclick = function(event) {
+    if (!event.target.matches('.profile-pic')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+}
+</script>
+</body>
+</html>

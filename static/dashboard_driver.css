@@ -1,0 +1,49 @@
+.btn-collected, .btn-action {
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-collected {
+    background-color: #28a745;
+    color: #fff;
+    border-color: #28a745;
+}
+
+.btn-collected:hover {
+    background-color: #fff;
+    color: #28a745;
+}
+
+.status.collected {
+    background-color: #c3e6cb;
+    color: #155724;
+    padding: 6px 10px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+/* Active pickup row styling (ensure driver dashboard shows the active row) */
+.active-row {
+    background-color: #fff8e6; /* light warm background, force if other rules override */
+    transition: background-color 0.2s ease;
+}
+.active-row td:first-child {
+    padding-left: 12px;
+}
+.active-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background: #ffcc66;
+    color: #5a3b00;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+/* Make table rows align nicely on small screens */
+.requests-table-container table tbody tr td {
+    vertical-align: middle;
+}

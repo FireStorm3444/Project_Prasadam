@@ -1,0 +1,315 @@
+/* Profile Layout */
+.profile-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 24px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Left Column */
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Profile Card */
+.profile-card {
+    padding: 24px;
+    border-radius: 12px;
+}
+
+.profile-picture-section {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.upload-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 12px;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    opacity: 0;
+}
+
+.profile-picture-section:hover .upload-overlay {
+    opacity: 1;
+}
+
+.upload-overlay span {
+    font-size: 24px;
+}
+
+/* Basic Info */
+.basic-info {
+    text-align: center;
+}
+
+.basic-info h2 {
+    margin: 0 0 12px;
+    font-size: 24px;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.role-badge.donor { background: #e3f2fd; color: #1976d2; }
+.role-badge.recipient { background: #f3e5f5; color: #7b1fa2; }
+.role-badge.driver { background: #e8f5e9; color: #388e3c; }
+.role-badge.admin { background: #fce4ec; color: #c2185b; }
+.role-badge.super_admin { background: #fff3e0; color: #f57c00; }
+
+.basic-info p {
+    margin: 8px 0;
+    color: #666;
+}
+
+/* Stats Card */
+.stats-card {
+    padding: 24px;
+    border-radius: 12px;
+}
+
+.stats-card h3 {
+    margin: 0 0 16px;
+    font-size: 18px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.stat-item {
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Right Column Forms */
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-card {
+    padding: 24px;
+    border-radius: 12px;
+}
+
+.form-card h3 {
+    margin: 0 0 24px;
+    font-size: 18px;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #333;
+}
+
+.form-input,
+.form-textarea {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.form-input:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-small {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Account Settings */
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+.setting-info strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.setting-info p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+.setting-value {
+    font-weight: 500;
+}
+
+.setting-value.active {
+    color: #4caf50;
+}
+
+/* Responsive Design - Enhanced */
+@media (max-width: 1024px) {
+    .profile-layout {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+    }
+
+    .profile-picture-section {
+        width: 150px;
+        height: 150px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-layout {
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .form-card, .profile-card, .stats-card {
+        padding: 15px;
+    }
+
+    .profile-form button {
+        width: 100%;
+    }
+
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .setting-value {
+        margin-top: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-picture-section {
+        width: 120px;
+        height: 120px;
+    }
+
+    .basic-info h2 {
+        font-size: 20px;
+    }
+
+    .form-card h3 {
+        font-size: 16px;
+    }
+
+    .stats-card h3 {
+        font-size: 16px;
+    }
+
+    .stat-number {
+        font-size: 20px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+    }
+}
+
+/* Flash Messages */
+.flashes {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.alert-success {
+    background: #4caf50;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

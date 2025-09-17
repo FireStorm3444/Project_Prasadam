@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pickup Details - Prasadam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='listing_details.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='modal.css') }}">
+</head>
+<body>
+<header>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <h1>Prasadam</h1>
+    </div>
+    <div class="profile">
+        <a href="{{ url_for('driver_dashboard') }}" class="btn back-link">Dashboard</a>
+        <div class="profile-dropdown">
+            <img src="{{ profile_picture or 'https://avatar.iran.liara.run/public/3' }}" alt="Profile Picture" class="profile-pic" onclick="toggleDropdown(event)">
+            <div class="dropdown-content" id="profileDropdown">
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('pickup_history') }}">Pickup History</a>
+                <hr>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main-content">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flashes">
+                {% for message in messages %}
+                    <div class="alert-success">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="form-container primary-section">
+        <h2>Pickup Details</h2>
+
+        <!-- Status and Info Section -->
+        <div class="status-section">
+            <div>
+                <h3>Current Status: <span class="status {{ request.status.lower() }}">{{ request.status }}</span></h3>
+                <small style="color: #666;">Pickup ID: {{ request.id }}</small>
+            </div>
+
+            <div class="donor-info secondary-section" style="cursor: pointer;" onclick='showContactModal({
+                profile_picture: "{{ request.donor_profile_picture or 'https://avatar.iran.liara.run/public/3' }}",
+                name: "{{ request.donor_name }}",
+                phone: "{{ request.donor_phone }}",
+                email: "{{ request.donor_email }}",
+                address: "{{ request.donor_address }}"
+            })'>
+                <h4>Donor Information</h4>
+                <div class="donor-details">
+                    <img src="{{ request.donor_profile_picture or 'https://avatar.iran.liara.run/public/3' }}" alt="Donor Photo">
+                    <div>
+                        <p>{{ request.donor_name }}</p>
+                        <p>{{ request.donor_phone }}</p>
+                        <p>{{ request.donor_address }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipient-info secondary-section" style="cursor: pointer;" onclick='showContactModal({
+                profile_picture: "{{ request.recipient_profile_picture or 'https://avatar.iran.liara.run/public/3' }}",
+                name: "{{ request.recipient_name }}",
+                phone: "{{ request.recipient_phone }}",
+                email: "{{ request.recipient_email }}",
+                address: "{{ request.recipient_address }}"
+            })'>
+                <h4>NGO Information</h4>
+                <div class="recipient-details">
+                    <img src="{{ request.recipient_profile_picture or 'https://avatar.iran.liara.run/public/3' }}" alt="NGO Photo">
+                    <div>
+                        <p>{{ request.recipient_name }}</p>
+                        <p>{{ request.recipient_phone }}</p>
+                        <p>{{ request.recipient_address }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Permission Messages -->
+        <small class="form-small">Review the pickup details carefully before collection.</small>
+
+        <!-- Form/Details Section -->
+        <div class="donation-form">
+            <fieldset>
+                <legend>Food Details</legend>
+
+                <div class="form-group">
+                    <label for="food_type" class="form-label">Food Type:</label>
+                    <input type="text" class="form-input" value="{{ request.food_type }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity" class="form-label">Serves Approximately (Number of People)</label>
+                    <input type="text" class="form-input" value="{{ request.quantity }} people" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="description" class="form-label">Describe the Food Items</label>
+                    <textarea class="form-textarea" rows="3" readonly>{{ request.description or 'No description provided' }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="cooking-time" class="form-label">Date and Time of Preparation</label>
+                    <input type="text" class="form-input" value="{{ request.cooking_time }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="instructions" class="form-label">Special Instructions (Allergies, Storage, etc.)</label>
+                    <textarea class="form-textarea" rows="3" readonly>{{ request.instructions or 'No special instructions' }}</textarea>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Pickup Details</legend>
+
+                <div class="form-group">
+                    <label for="address" class="form-label">Full Pickup Address</label>
+                    <textarea class="form-textarea" rows="3" readonly>{{ request.address or 'Address not provided' }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="pickup-time" class="form-label">Preferred Pickup Time</label>
+                    <input type="text" class="form-input" value="{{ request.pickup_time or 'Not specified' }}" readonly>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                {% if request.status == 'Assigned' and request.driver_id == session.get('user_id') %}
+                    <form method="POST" action="{{ url_for('mark_collected', listing_id=request.id) }}">
+                        <button type="submit" class="btn btn-collected" onclick="return confirm('Are you sure you have collected this food donation?')">Mark as Collected</button>
+                    </form>
+                {% elif request.status == 'Collected' %}
+                    <p style="color: #28a745; font-weight: bold; text-align: center; margin: 10px 0;">
+                        ✅ You have successfully collected this food donation.
+                    </p>
+                {% elif request.status == 'Claimed' and not request.driver_id %}
+                    <!-- Driver can claim this listing if they don't have an active pickup -->
+                    {% set has_active_pickup = False %}
+                    {% for pickup in pickups if pickup.status == 'Assigned' and pickup.driver_id == session.get('user_id') %}
+                        {% set has_active_pickup = True %}
+                    {% endfor %}
+
+                    {% if has_active_pickup %}
+                        <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                            <p style="color: #856404; font-weight: bold; text-align: center; margin: 0;">
+                                ⚠️ You have an active pickup that needs to be completed first
+                            </p>
+                            <p style="color: #856404; text-align: center; margin: 5px 0 0 0; font-size: 0.9em;">
+                                Please collect your current pickup before taking on new listings
+                            </p>
+                        </div>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('driver_accept_listing', listing_id=request.id) }}">
+                            <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure you want to take this pickup?')">Take This Pickup</button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <p style="color: #666; font-style: italic; text-align: center; margin: 10px 0;">
+                        {% if request.status == 'Pending' %}
+                            This listing is pending and not yet claimed by an NGO.
+                        {% elif request.status == 'Assigned' and request.driver_id != session.get('user_id') %}
+                            This pickup is assigned to another driver.
+                        {% else %}
+                            This pickup is not available or has already been completed.
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Contact Modal -->
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeContactModal()">&times;</button>
+      <img id="modalProfileImg" src="" alt="Profile" class="modal-profile-img">
+      <h2 id="modalTitle" class="modal-title"></h2>
+      <div id="modalDetails" class="modal-details">
+      </div>
+    </div>
+  </div>
+
+<script>
+    function showNotImplemented() {
+        alert('This feature is not yet implemented.');
+    }
+
+    function toggleDropdown(event) {
+        const dropdown = document.getElementById('profileDropdown');
+        dropdown.classList.toggle('show');
+        event.stopPropagation();
+    }
+
+    // Close the dropdown if clicked outside
+    window.onclick = function(event) {
+        const dropdown = document.getElementById('profileDropdown');
+        if (!event.target.matches('.profile-pic')) {
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            }
+        }
+    }
+
+    function showContactModal(contactData) {
+      const modal = document.getElementById('contactModal');
+      const profileImg = document.getElementById('modalProfileImg');
+      const title = document.getElementById('modalTitle');
+      const details = document.getElementById('modalDetails');
+
+      profileImg.src = contactData.profile_picture || 'https://avatar.iran.liara.run/public/3';
+      title.textContent = contactData.name || contactData.user_name || 'Contact';
+
+      details.innerHTML = '';
+      if (contactData.phone) {
+        details.innerHTML += `<p>${contactData.phone}</p>`;
+      }
+      if (contactData.email) {
+        details.innerHTML += `<p>${contactData.email}</p>`;
+      }
+      if (contactData.address) {
+        details.innerHTML += `<p>${contactData.address}</p>`;
+      }
+
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeContactModal() {
+      const modal = document.getElementById('contactModal');
+      modal.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('contactModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeContactModal();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && document.getElementById('contactModal').classList.contains('show')) {
+        closeContactModal();
+      }
+    });
+  </script>
+</body>
+</html>

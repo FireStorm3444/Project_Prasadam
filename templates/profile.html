@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Prasadam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+</head>
+<body>
+<header>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <h1>Prasadam - My Profile</h1>
+    </div>
+    <div class="profile">
+        <a href="{% if session['role'] in ['admin','super_admin'] %}{{ url_for('admin_dashboard') }}{% elif session['role'] == 'recipient' %}{{ url_for('ngo_dashboard') }}{% elif session['role'] == 'driver' %}{{ url_for('driver_dashboard') }}{% else %}{{ url_for('home') }}{% endif %}" class="btn dashboard-btn">Dashboard</a>
+        <div class="profile-dropdown">
+            <img src="{{ profile_picture or 'https://avatar.iran.liara.run/public/3' }}" alt="Profile Picture" class="profile-pic" onclick="toggleDropdown(event)">
+            <div class="dropdown-content" id="profileDropdown">
+                {% if session['role'] in ['admin','super_admin'] %}
+                    <a href="#" class="active">Profile</a>
+                    <a href="#" onclick="showNotImplemented()">Reports & Analytics</a>
+                    <hr>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% elif session['role'] == 'recipient' %}
+                    <a href="#" class="active">Profile</a>
+                    <a href="{{ url_for('manage_affiliations') }}">Manage Affiliations</a>
+                    <a href="{{ url_for('claim_history') }}">Claim History</a>
+                    <hr>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% elif session['role'] == 'driver' %}
+                    <a href="#" class="active">Profile</a>
+                    <a href="{{ url_for('pickup_history') }}">Pickup History</a>
+                    <hr>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('profile') }}">Profile</a>
+                    <a href="{{ url_for('donation_history') }}">Donation History</a>
+                    <a href="{{ url_for('find_recipients') }}">Find NGOs</a>
+                    <a href="{{ url_for('manage_affiliations') }}">Manage Affiliations</a>
+                    <a href="#" onclick="showNotImplemented()">Scheduled Donations</a>
+                    <hr>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main-content">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flashes">
+                {% for message in messages %}
+                    <div class="alert-success">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="profile-layout">
+        <!-- Left Column: Profile Picture and Basic Info -->
+        <div class="left-column">
+            <div class="profile-card primary-section">
+                <div class="profile-picture-section">
+                    <img src="{{ profile_picture or 'https://avatar.iran.liara.run/public/3' }}" alt="Profile Picture" class="profile-picture" id="profilePicturePreview">
+                    <div class="upload-overlay" onclick="document.getElementById('profilePictureInput').click()">
+                        <span>📷</span>
+                    </div>
+                    <form id="profilePictureForm" method="POST" action="{{ url_for('update_profile_picture') }}" enctype="multipart/form-data" style="display: none;">
+                        <input type="file" id="profilePictureInput" name="profile_picture" accept="image/*" onchange="previewAndUpload(this)">
+                    </form>
+                </div>
+
+                <div class="basic-info">
+                    <h2>{{ user_data.name or user_data.user_name }}</h2>
+                    <p class="role-badge {{ session['role'] }}">{{ session['role'].title() }}</p>
+                    <p class="email">{{ user_data.email }}</p>
+                    <p class="phone">📞 {{ user_data.phone or 'Not provided' }}</p>
+                    <p class="address">📍 {{ user_data.address or 'Not provided' }}</p>
+                </div>
+            </div>
+
+            <!-- Role-Specific Stats -->
+            <div class="stats-card primary-section">
+                <h3>{% if session['role'] in ['admin', 'super_admin'] %}Admin Statistics{% elif session['role'] == 'driver' %}Driver Statistics{% elif session['role'] == 'recipient' %}Recipient Statistics{% else %}Donation Statistics{% endif %}</h3>
+                <div class="stats-grid">
+                    {% if session['role'] in ['admin', 'super_admin'] %}
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.total_requests or 0 }}</span>
+                            <span class="stat-label">Total Requests</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.pending_requests or 0 }}</span>
+                            <span class="stat-label">Pending</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.approved_requests or 0 }}</span>
+                            <span class="stat-label">Approved</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.total_users or 0 }}</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    {% elif session['role'] == 'driver' %}
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.total_pickups or 0 }}</span>
+                            <span class="stat-label">Total Pickups</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.completed_pickups or 0 }}</span>
+                            <span class="stat-label">Completed</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.pending_pickups or 0 }}</span>
+                            <span class="stat-label">Pending</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.total_servings or 0 }}</span>
+                            <span class="stat-label">Servings Collected</span>
+                        </div>
+                    {% elif session['role'] == 'recipient' %}
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.total_claims or 0 }}</span>
+                            <span class="stat-label">Total Claims</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.completed_claims or 0 }}</span>
+                            <span class="stat-label">Completed</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.pending_claims or 0 }}</span>
+                            <span class="stat-label">Pending</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.total_servings or 0 }}</span>
+                            <span class="stat-label">Servings Received</span>
+                        </div>
+                    {% else %} <!-- donor -->
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.total_donations or 0 }}</span>
+                            <span class="stat-label">Donations Made</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.total_servings or 0 }}</span>
+                            <span class="stat-label">Servings Donated</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.completed_donations or 0 }}</span>
+                            <span class="stat-label">Completed</span>
+                        </div>
+                        <div class="stat-item secondary-section">
+                            <span class="stat-number">{{ stats.pending_donations or 0 }}</span>
+                            <span class="stat-label">Pending</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Editable Forms -->
+        <div class="right-column">
+            <!-- Personal Information Form -->
+            <div class="form-card primary-section">
+                <h3>Personal Information</h3>
+                <form method="POST" action="{{ url_for('update_profile_info') }}" class="profile-form">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" id="name" name="name" class="form-input" value="{{ user_data.name or user_data.user_name }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" value="{{ user_data.email }}" disabled>
+                        <small class="form-small">Email cannot be changed as it's your primary identifier</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="form-input" value="{{ user_data.phone or '' }}" placeholder="Enter your phone number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea id="address" name="address" class="form-textarea" rows="3" placeholder="Enter your address">{{ user_data.address or '' }}</textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Update Information</button>
+                </form>
+            </div>
+
+            <!-- Password Change Form -->
+            <div class="form-card primary-section">
+                <h3>Change Password</h3>
+                <form method="POST" action="{{ url_for('change_password') }}" class="profile-form">
+                    <div class="form-group">
+                        <label for="current_password" class="form-label">Current Password</label>
+                        <input type="password" id="current_password" name="current_password" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new_password" class="form-label">New Password</label>
+                        <input type="password" id="new_password" name="new_password" class="form-input" required minlength="8">
+                        <small class="form-small">Password must be at least 8 characters long</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_password" class="form-label">Confirm New Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-input" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary">Change Password</button>
+                </form>
+            </div>
+
+            <!-- Account Settings -->
+            <div class="form-card primary-section">
+                <h3>Account Settings</h3>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <strong>Account Type</strong>
+                        <p>{{ session['role'].title() }} Account</p>
+                    </div>
+                    <span class="setting-value">{{ session['role'].title() }}</span>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <strong>Account Status</strong>
+                        <p>Your account is active and verified</p>
+                    </div>
+                    <span class="setting-value active">Active</span>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <strong>Member Since</strong>
+                        <p>You joined Prasadam on {{ user_data.created_at or 'Unknown' }}</p>
+                    </div>
+                    <span class="setting-value">{{ user_data.created_at or 'N/A' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+function showNotImplemented() {
+    alert('This feature is not yet implemented.');
+}
+
+function toggleDropdown(event) {
+    const dropdown = document.getElementById('profileDropdown');
+    dropdown.classList.toggle('show');
+    event.stopPropagation();
+}
+
+// Close the dropdown if clicked outside
+window.onclick = function(event) {
+    const dropdown = document.getElementById('profileDropdown');
+    if (!event.target.matches('.profile-pic')) {
+        if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+        }
+    }
+}
+
+function previewAndUpload(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('profilePicturePreview').src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+
+        // Auto-submit the form
+        document.getElementById('profilePictureForm').submit();
+    }
+}
+
+// Password confirmation validation
+document.addEventListener('DOMContentLoaded', function() {
+    const newPassword = document.getElementById('new_password');
+    const confirmPassword = document.getElementById('confirm_password');
+
+    function validatePassword() {
+        if (newPassword.value !== confirmPassword.value) {
+            confirmPassword.setCustomValidity('Passwords do not match');
+        } else {
+            confirmPassword.setCustomValidity('');
+        }
+    }
+
+    newPassword.addEventListener('input', validatePassword);
+    confirmPassword.addEventListener('input', validatePassword);
+});
+</script>
+</body>
+</html>

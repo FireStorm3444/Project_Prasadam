@@ -1,0 +1,78 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+.flash-messages {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 15px;
+}
+
+.flash-messages li {
+  color: red;
+  font-weight: bold;
+}
+body {
+  margin: 0;
+  background: #fefbe9;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.image-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.img-A, .img-B, .img-food, .img-Thali {
+  width: 184px;
+  height: 193px;
+  object-fit: cover;
+  border-radius: 44px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.login-box h2 {
+  color: #d84315;
+  margin-bottom: 20px;
+}
+
+.login-box h2 span {
+  color: #6a1b1a;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}

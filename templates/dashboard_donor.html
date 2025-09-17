@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Prasadam Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard_donor.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+      <h1>Prasadam</h1>
+    </div>
+    <div class="profile">
+      <!-- In a real app, you'd make this dynamic -->
+        {% if session['role'] == 'admin' or session['role'] == 'super_admin' %}
+                <a href="{{ url_for('admin_dashboard') }}" class="panel-link btn">Admin Panel</a>
+        {% elif session['role'] == 'driver' %}
+                <a href="{{ url_for('driver_dashboard') }}" class="panel-link btn">Driver Panel</a>
+        {% endif %}
+
+        <div class="profile-dropdown">
+          <img src="{{ profile_picture }}" alt="Profile Picture" class="profile-pic" onclick="toggleDropdown(event)">
+          <div class="dropdown-content" id="profileDropdown">
+            {% if session['role'] == 'admin' or session['role'] == 'super_admin' %}
+              <a href="{{ url_for('profile') }}">Profile</a>
+              <a href="{{ url_for('manage_users') }}">Manage Users</a>
+              <a href="#" onclick="showNotImplemented()">Reports & Analytics</a>
+              <hr>
+              <a href="{{ url_for('logout') }}">Logout</a>
+            {% elif session['role'] == 'driver' %}
+              <a href="{{ url_for('profile') }}">Profile</a>
+              <a href="{{ url_for('pickup_history') }}">Pickup History</a>
+              <hr>
+              <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+              <a href="{{ url_for('profile') }}">Profile</a>
+              <a href="{{ url_for('donation_history') }}">Donation History</a>
+              <a href="{{ url_for('find_recipients') }}">Find NGOs</a>
+              <a href="{{ url_for('manage_affiliations') }}">Manage Affiliations</a>
+              <a href="#" onclick="showNotImplemented()">Scheduled Donations</a>
+              <hr>
+              <a href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+          </div>
+        </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Welcome back, <span>{{ user_name }}!</span></h2>
+      <p>We help hotels, events, and individuals donate excess food to those in need.</p>
+       <!-- Flash Messages -->
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages-home flashes">
+              {% for message in messages %}
+                <div class="alert-success">{{ message }}</div>
+              {% endfor %}
+            </div>
+        {% endif %}
+      {% endwith %}
+      <div class="stats">
+        <div class="stat secondary-section">
+          <img src="{{ url_for('static', filename='images/3.png') }}" alt="Hotel">
+            <div class="details">
+                <p>150</p>
+                <p>Hotels Partnered</p>
+            </div>
+        </div>
+        <div class="stat secondary-section">
+          <img src="{{ url_for('static', filename='images/4.png') }}" alt="Meals">
+          <div class="details">
+                <p>150</p>
+                <p>Meals Collected</p>
+          </div>
+        </div>
+        <div class="stat secondary-section">
+          <img src="{{ url_for('static', filename='images/5.png') }}" alt="NGO">
+          <div class="details">
+                <p>150</p>
+                <p>NGOs Assisted</p>
+          </div>
+        </div>
+        <div class="stat secondary-section">
+          <img src="{{ url_for('static', filename='images/6.png') }}" alt="Food">
+          <div class="details">
+                <p>150</p>
+                <p>Food Distributed</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- New Dashboard Layout -->
+    <div class="dashboard-layout">
+      <!-- Left Column: Button + Image -->
+      <div class="left-column">
+        <a href="{{ url_for('new_request') }}" class="btn new-request-btn">+ New Listing</a>
+        <img src="{{ url_for('static', filename='images/bus.png') }}" alt="Delivery Bus" class="dashboard-image">
+      </div>
+
+      <!-- Middle Column: Requests Section -->
+      <div class="middle-column primary-section">
+        <div class="requests">
+          <h3>Your Recent Listings</h3>
+          <div class="requests-table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Food Type</th>
+                  <th>Quantity (People)</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if requests %}
+                  {% for req in requests %}
+                    <tr onclick="window.location.href='{{ url_for('donor_request_details', request_id=req.id) }}'" style="cursor: pointer;">
+                      <td>{{ req.food_type }}</td>
+                      <td>{{ req.quantity }}</td>
+                      <td><span class="status {{ req.status.lower() }}">{{ req.status }}</span></td>
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr>
+                    <td colspan="3" style="text-align:center; padding: 20px;">You have no recent requests.</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Images with 3D layered effect -->
+      <div class="right-column">
+        <div class="image-stack">
+          <img src="{{ url_for('static', filename='images/1.png') }}" alt="Food Item" class="dashboard-image overlay-image">
+          <img src="{{ url_for('static', filename='images/basket.png') }}" alt="Food Basket" class="dashboard-image base-image">
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+<footer>
+    <p>&copy; 2025 Prasadam. All rights reserved. | Making a difference, one meal at a time.</p>
+</footer>
+
+  <script>
+    function showNotImplemented() {
+      alert('This feature is not yet implemented.');
+    }
+
+    function toggleDropdown(event) {
+      const dropdown = document.getElementById('profileDropdown');
+      dropdown.classList.toggle('show');
+      event.stopPropagation();
+    }
+
+    // Close the dropdown if clicked outside
+    window.onclick = function(event) {
+      const dropdown = document.getElementById('profileDropdown');
+      if (!event.target.matches('.profile-pic')) {
+        if (dropdown.classList.contains('show')) {
+          dropdown.classList.remove('show');
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

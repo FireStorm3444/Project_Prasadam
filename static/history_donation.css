@@ -1,0 +1,171 @@
+/* Donation History CSS */
+.history-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.history-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    text-align: center;
+}
+
+.stat-card h3 {
+    margin: 0;
+    font-size: 2em;
+    color: #e74c3c;
+}
+
+.stat-card p {
+    margin: 10px 0 0;
+    color: #666;
+}
+
+.history-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab-button.active {
+    color: #e74c3c;
+    border-bottom-color: #e74c3c;
+}
+
+.donation-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.donation-card {
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.donation-card h4 {
+    margin: 0 0 10px;
+    color: #e74c3c;
+}
+
+.donation-info {
+    margin: 15px 0;
+}
+
+.donation-info p {
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.donation-info i {
+    width: 20px;
+    color: #e74c3c;
+}
+
+.donation-status {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-claimed {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.status-assigned {
+    background: #fff4e5;
+    color: #ff6b00;
+}
+
+.status-collected {
+    background: #e8f5e9;
+    color: #388e3c;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 30px;
+    margin-top: 15px;
+    border-left: 2px solid #e0e0e0;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -36px;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #e74c3c;
+}
+
+.timeline-time {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.no-donations {
+    text-align: center;
+    padding: 40px;
+}
+
+@media (max-width: 768px) {
+    .donation-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .history-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .history-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .history-tabs {
+        flex-direction: column;
+    }
+
+    .tab-button {
+        width: 100%;
+    }
+}

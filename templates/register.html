@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Prasadam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+</head>
+<body>
+    <div class="register-container">
+        <!-- Logo and Header Section -->
+        <div class="header-section">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Prasadam Logo">
+                <h1>Prasadam</h1>
+            </div>
+            <p class="tagline">Join us in reducing food waste and feeding those in need</p>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="register-card primary-section">
+            <h2>Create Your Account</h2>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flashes">
+                        {% for message in messages %}
+                            <div class="alert-error">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" class="register-form" id="registerForm">
+                <div class="form-group">
+                    <label for="name" class="form-label">Full Name *</label>
+                    <input type="text" id="name" name="name" class="form-input" required placeholder="Enter your full name" value="{{ request.form.name if request.form }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address *</label>
+                    <input type="email" id="email" name="email" class="form-input" required placeholder="example@gmail.com" value="{{ request.form.email if request.form }}">
+                    <small class="form-small">We'll send OTP verification to this email</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone" class="form-label">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" class="form-input" required pattern="\d{10}" placeholder="10-digit phone number" maxlength="10" value="{{ request.form.phone if request.form }}">
+                    <small class="form-small">Enter without country code</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="usertype" class="form-label">Account Type *</label>
+                    <select id="usertype" name="usertype" class="form-select" required>
+                        <option value="">Select your account type</option>
+                        <option value="donor" {{ 'selected' if request.form.usertype == 'donor' }}>Food Donor (Hotel/Restaurant/Individual)</option>
+                        <option value="ngo" {{ 'selected' if request.form.usertype == 'ngo' }}>NGO/Charity Organization</option>
+                        <option value="volunteer" {{ 'selected' if request.form.usertype == 'volunteer' }}>Volunteer</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea id="address" name="address" class="form-textarea" rows="3" placeholder="Enter your complete address (optional)">{{ request.form.address if request.form }}</textarea>
+                    <small class="form-small">This helps us connect you with nearby opportunities</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password *</label>
+                    <input type="password" id="password" name="password" class="form-input" required minlength="8" placeholder="Create a strong password">
+                    <small class="form-small">Minimum 8 characters</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password" class="form-label">Confirm Password *</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-input" required placeholder="Re-enter your password">
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="terms" name="terms" class="form-checkbox" required>
+                        I agree to the <a href="#" onclick="showTerms()">Terms of Service</a> and <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn register-btn">Create Account</button>
+            </form>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <!-- Google Sign Up Button -->
+            <a href="{{ url_for('login_google') }}" class="btn btn-google">
+                Sign up with Google
+            </a>
+
+            <div class="login-link">
+                Already have an account? <a href="{{ url_for('login') }}">Sign In</a>
+            </div>
+        </div>
+
+        <!-- Feature Highlights -->
+        <div class="features-section">
+            <div class="feature-card secondary-section">
+                <img src="{{ url_for('static', filename='images/3.png') }}" alt="Connect">
+                <h3>Connect</h3>
+                <p>Join a community of food donors and NGOs working together</p>
+            </div>
+            <div class="feature-card secondary-section">
+                <img src="{{ url_for('static', filename='images/4.png') }}" alt="Donate">
+                <h3>Donate</h3>
+                <p>Easily donate excess food and track your impact</p>
+            </div>
+            <div class="feature-card secondary-section">
+                <img src="{{ url_for('static', filename='images/5.png') }}" alt="Impact">
+                <h3>Make Impact</h3>
+                <p>See how your donations help feed those in need</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Prasadam. All rights reserved. | Making a difference, one meal at a time.</p>
+    </footer>
+
+    <script>
+        // Form validation
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            const terms = document.getElementById('terms').checked;
+
+            // Password matching validation
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                showError('Passwords do not match');
+                return;
+            }
+
+            // Password strength validation
+            if (password.length < 8) {
+                e.preventDefault();
+                showError('Password must be at least 8 characters long');
+                return;
+            }
+
+            // Terms validation
+            if (!terms) {
+                e.preventDefault();
+                showError('Please accept the Terms of Service and Privacy Policy');
+                return;
+            }
+        });
+
+        // Phone number validation
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            e.target.value = value;
+        });
+
+        // Real-time password confirmation
+        document.getElementById('confirm_password').addEventListener('input', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = e.target.value;
+
+            if (confirmPassword && password !== confirmPassword) {
+                e.target.setCustomValidity('Passwords do not match');
+            } else {
+                e.target.setCustomValidity('');
+            }
+        });
+
+        function showError(message) {
+            // Remove existing error if any
+            const existingError = document.querySelector('.alert-error');
+            if (existingError) {
+                existingError.remove();
+            }
+
+            // Create new error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'alert-error';
+            errorDiv.textContent = message;
+
+            const form = document.querySelector('.register-form');
+            form.insertBefore(errorDiv, form.firstChild);
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        function showTerms() {
+            alert('Terms of Service: By using Prasadam, you agree to help reduce food waste and connect surplus food with those in need. Please use the platform responsibly and provide accurate information.');
+        }
+
+        function showPrivacy() {
+            alert('Privacy Policy: We collect and use your information to facilitate food donations. Your personal data is protected and will not be shared without your consent, except as necessary for donation coordination.');
+        }
+
+        // Auto-focus first input
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('name').focus();
+        });
+    </script>
+</body>
+</html>

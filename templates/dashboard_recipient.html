@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NGO Dashboard - Prasadam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard_donor.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard_recipient.css') }}">
+</head>
+<body>
+<header>
+    <div class="logo">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+      <h1>Prasadam - NGO Panel</h1>
+    </div>
+    <div class="profile">
+      <div class="profile-dropdown">
+        <img src="{{ profile_picture }}" alt="Profile Picture" class="profile-pic" onclick="toggleDropdown(event)">
+        <div class="dropdown-content" id="profileDropdown">
+          <a href="{{ url_for('profile') }}">Profile</a>
+          <a href="{{ url_for('manage_affiliations') }}">Manage Affiliations</a>
+          <a href="{{ url_for('claim_history') }}">Claim History</a>
+          <hr>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+      </div>
+    </div>
+</header>
+
+<main>
+  {% if is_verified %}
+  <section class="hero">
+    <h2>Welcome back, <span>{{ session.get('user_name','NGO') }}!</span></h2>
+    <p>Browse listings from your affiliated donors or public donors.</p>
+    <div class="stats">
+      <div class="stat secondary-section">
+        <img src="{{ url_for('static', filename='images/3.png') }}" alt="Hotel">
+        <div class="details">
+          <p>150</p>
+          <p>Hotels Partnered</p>
+        </div>
+      </div>
+      <div class="stat secondary-section">
+        <img src="{{ url_for('static', filename='images/4.png') }}" alt="Meals">
+        <div class="details">
+          <p>150</p>
+          <p>Meals Collected</p>
+        </div>
+      </div>
+      <div class="stat secondary-section">
+        <img src="{{ url_for('static', filename='images/5.png') }}" alt="NGO">
+        <div class="details">
+          <p>150</p>
+          <p>NGOs Assisted</p>
+        </div>
+      </div>
+      <div class="stat secondary-section">
+        <img src="{{ url_for('static', filename='images/6.png') }}" alt="Food">
+        <div class="details">
+          <p>150</p>
+          <p>Food Distributed</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="dashboard-layout">
+    <!-- Left: Onboarding buttons instead of New Request -->
+    <div class="left-column">
+      <a href="{{ url_for('ngo_onboard_page') }}" class="btn add-affiliates-btn">+ Add Affiliates</a>
+{#      <a href="{{ url_for('ngo_onboard_page') }}" class="btn add-affiliation-btn">+ Add Driver</a>#}
+      <img src="{{ url_for('static', filename='images/bus.png') }}" alt="Delivery Bus" class="dashboard-image">
+    </div>
+
+    <!-- Middle: Listings with tabs -->
+    <div class="middle-column primary-section">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <div class="flash-messages-home flashes">
+                {% for message in messages %}<div class="alert-success">{{ message }}</div>{% endfor %}
+              </div>
+            {% endif %}
+        {% endwith %}
+      <div class="requests">
+        <h3 id="listingsHeading">Listings from Your Affiliated Donors</h3>
+        <div class="tabs">
+          <button class="tab-link active" onclick="openTab(event, 'affiliated')">Affiliated Listings</button>
+          <button class="tab-link" onclick="openTab(event, 'public')">Public Listings</button>
+        </div>
+
+        <div id="affiliated" class="tab-content active">
+          <div class="requests-table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Donor Name</th>
+                  <th>Food Type</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if affiliated_listings %}
+                  {% for listing in affiliated_listings %}
+                    <tr onclick="window.location.href='{{ url_for('recipient_request_details', request_id=listing.id) }}'" style="cursor:pointer;">
+                      <td>{{ listing.donor_name }}</td>
+                      <td>{{ listing.food_type }}</td>
+                      <td>{{ listing.quantity }} servings</td>
+                      <td><span class="status {{ listing.status.lower() }}">{{ listing.status }}</span></td>
+                      <td>
+                          <a href="{{ url_for('recipient_request_details', request_id=listing.id) }}" class="btn btn-primary">View Details</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr>
+                    <td colspan="5" style="text-align:center; padding: 20px;">No listings from your affiliated donors at the moment.</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="public" class="tab-content" style="display:none;">
+          <div class="requests-table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Donor Name</th>
+                  <th>Food Type</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if public_listings %}
+                  {% for listing in public_listings %}
+                    <tr onclick="window.location.href='{{ url_for('recipient_request_details', request_id=listing.id) }}'" style="cursor: pointer;">
+                      <td>{{ listing.donor_name }}</td>
+                      <td>{{ listing.food_type }}</td>
+                      <td>{{ listing.quantity }} servings</td>
+                      <td><span class="status {{ listing.status.lower() }}">{{ listing.status }}</span></td>
+                      <td>
+                          <a href="{{ url_for('recipient_request_details', request_id=listing.id) }}" class="btn btn-primary">View Details</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr>
+                    <td colspan="5" style="text-align:center; padding: 20px;">No public listings available at the moment.</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: images -->
+    <div class="right-column">
+      <div class="image-stack">
+        <img src="{{ url_for('static', filename='images/1.png') }}" alt="Food Item" class="dashboard-image overlay-image">
+        <img src="{{ url_for('static', filename='images/basket.png') }}" alt="Food Basket" class="dashboard-image base-image">
+      </div>
+    </div>
+  </div>
+  {% else %}
+    <div class="primary-section" style="margin-top: 16px;">
+      <h2>Verification Pending</h2>
+      <p>Your account is pending verification by admin. You can browse but cannot claim listings yet.</p>
+    </div>
+  {% endif %}
+</main>
+
+<footer>
+    <p>&copy; 2025 Prasadam. All rights reserved. | Making a difference, one meal at a time.</p>
+</footer>
+
+<script>
+function toggleDropdown(event) { event.stopPropagation(); document.getElementById('profileDropdown').classList.toggle('show'); }
+window.onclick = function(event) { if (!event.target.matches('.profile-pic')) { const d = document.getElementById('profileDropdown'); if (d && d.classList.contains('show')) d.classList.remove('show'); } }
+function openTab(evt, tabName) {
+  var i, tabcontent = document.getElementsByClassName('tab-content');
+  for (i = 0; i < tabcontent.length; i++) { tabcontent[i].style.display = 'none'; }
+  var tablinks = document.getElementsByClassName('tab-link');
+  for (i = 0; i < tablinks.length; i++) { tablinks[i].className = tablinks[i].className.replace(' active', ''); }
+  document.getElementById(tabName).style.display = 'block';
+  evt.currentTarget.className += ' active';
+  var heading = document.getElementById('listingsHeading');
+  if (heading) heading.textContent = tabName === 'public' ? 'Public Listings from All Donors' : 'Listings from Your Affiliated Donors';
+}
+</script>
+</body>
+</html>

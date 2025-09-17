@@ -1,0 +1,43 @@
+<!-- templates/register_google.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="login-box primary-section">
+        <h2>Complete your Registration</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label class="form-label">Email:</label>
+                <input type="email" class="form-input" value="{{ email }}" disabled>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Name:</label>
+                <input type="text" name="name" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Phone:</label>
+                <input type="tel" name="phone" class="form-input" required pattern="\d{10}" placeholder="10-digit phone number" inputmode="numeric" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label class="form-label">User Type:</label>
+                <select name="usertype" class="form-select" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="Donor">Food Donor (Hotel/Restaurant/Individual)</option>
+                    <option value="NGO">NGO/Charity Organization</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Address:</label>
+                <textarea name="address" class="form-textarea" required></textarea>
+            </div>
+            <button class="btn" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

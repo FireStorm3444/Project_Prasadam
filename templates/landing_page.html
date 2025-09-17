@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prasadam — From Surplus to Sustenance</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='landing_page.css') }}">
+</head>
+<body>
+  <header class="lp-header">
+    <div class="lp-logo">
+      <img src="{{ url_for('static', filename='LOGO 3.jpg') }}" alt="Prasadam logo">
+      <span class="brand">Prasadam</span>
+    </div>
+    <nav class="lp-nav">
+      <a href="#mission">Our Mission</a>
+      <a href="#how">How It Works</a>
+      <a href="#join">Join Us</a>
+    </nav>
+    <div class="lp-cta">
+      <a class="btn secondary" href="{{ url_for('login') }}">Login</a>
+      <a class="btn primary" href="{{ url_for('register') }}">Register</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-inner">
+        <h1>From Surplus to Sustenance.</h1>
+        <p class="tag">Prasadam is the bridge connecting Jaipur's food donors with verified NGOs, ensuring no meal goes to waste.</p>
+        <div class="hero-actions">
+          <a class="btn primary large" href="{{ url_for('register') }}">Donate Food</a>
+          <a class="btn secondary large" href="{{ url_for('register') }}">Receive Food</a>
+        </div>
+      </div>
+      <div class="hero-media" aria-hidden="true"></div>
+    </section>
+
+    <section id="mission" class="section mission primary-section">
+      <h2>A Paradox on Every Plate.</h2>
+      <div class="cols">
+        <div class="col secondary-section">
+          <div class="stat">40%<span class="sub"> </span></div>
+          <p>of food produced in India is wasted, while countless events and restaurants dispose of perfectly good, surplus meals every single day.</p>
+        </div>
+        <div class="col secondary-section">
+          <div class="stat">19 Crore</div>
+          <p>people in India go to sleep hungry. Many of them are right here in our city, hoping for their next meal.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="section how primary-section">
+      <h2>Simple, Direct, and Impactful.</h2>
+      <div class="steps">
+        <div class="step secondary-section">
+          <div class="icon">📋</div>
+          <h3>LIST</h3>
+          <p>Donors create a listing for their surplus food in under two minutes, specifying details and pickup window.</p>
+        </div>
+        <div class="step secondary-section">
+          <div class="icon">🤝</div>
+          <h3>CONNECT</h3>
+          <p>Verified NGOs in the area are instantly notified. They can view and claim the listing with a single click.</p>
+        </div>
+        <div class="step secondary-section">
+          <div class="icon">🚚</div>
+          <h3>COLLECT</h3>
+          <p>The NGO coordinates pickup with the Donor. The platform facilitates the connection and the community handles logistics.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="impact" class="section impact primary-section">
+      <h2>Join the Movement.</h2>
+      <div class="counters">
+        <div class="counter secondary-section" data-target="10000">0<br><span>Meals Served</span></div>
+        <div class="counter secondary-section" data-target="50">0<br><span>Donor Partners</span></div>
+        <div class="counter secondary-section" data-target="25">0<br><span>NGO Affiliates</span></div>
+        <div class="counter secondary-section" data-target="1200">0<br><span>Kg Food Saved</span></div>
+      </div>
+    </section>
+
+    <section id="join" class="section join primary-section">
+      <h2>Are You a Donor or a Recipient?</h2>
+      <div class="cards">
+        <div class="card secondary-section">
+          <h3>Become a Food Donor</h3>
+          <p>Join leading hotels and restaurants in Jaipur. Reduce waste, build goodwill, and make a tangible impact in your community. It's simple and free.</p>
+          <a class="btn primary" href="{{ url_for('register') }}">Register as a Donor</a>
+        </div>
+        <div class="card secondary-section">
+          <h3>Become a Receiving Partner</h3>
+          <p>Gain access to a reliable stream of high-quality food donations. Get verified, manage your pickups, and better serve your community.</p>
+          <a class="btn primary" href="{{ url_for('register') }}">Register your NGO</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="lp-footer">
+    <div class="foot-inner">
+      <div class="brand-block">
+        <img src="{{ url_for('static', filename='LOGO 3.jpg') }}" alt="Prasadam logo">
+        <p>Prasadam — reducing food waste and feeding communities in Jaipur.</p>
+      </div>
+      <div class="links">
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+<script>
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',function(e){
+    const target = document.querySelector(this.getAttribute('href'));
+    if(target){
+      e.preventDefault();
+      // Scroll so the target is centered in the viewport rather than aligned to the top
+      target.scrollIntoView({behavior:'smooth', block:'center', inline:'nearest'});
+    }
+  });
+});
+
+// Simple counter animation when in view
+function animateCounters(){
+  const counters = document.querySelectorAll('.counter');
+  const speed = 200;
+  counters.forEach(c=>{
+    const update = ()=>{
+      const target = +c.dataset.target;
+      const value = +c.innerText.replace(/\D/g,'') || 0;
+      const inc = Math.ceil(target / speed);
+      if(value < target){ c.innerHTML = (value + inc) +'<br><span>'+c.querySelector('span').innerText+'</span>'; setTimeout(update,20); }
+      else { c.innerHTML = target +'<br><span>'+c.querySelector('span').innerText+'</span>'; }
+    };
+    const obs = new IntersectionObserver((entries,observer)=>{ if(entries[0].isIntersecting){ update(); observer.disconnect(); } },{threshold:0.4});
+    obs.observe(c);
+  });
+}
+window.addEventListener('load', animateCounters);
+</script>
+</body>
+</html>
