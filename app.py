@@ -216,11 +216,13 @@ def logout():
 # Google OAuth - initiate
 @app.route('/login/google')
 def login_google():
+    base_url = os.environ.get('BASE_URL', 'http://localhost:5000')
+    redirect_uri = f'{base_url}/google/callback'
     try:
         flow = Flow.from_client_secrets_file(
             GOOGLE_CLIENT_SECRETS_FILE,
             scopes=["https://www.googleapis.com/auth/userinfo.email", "openid"],
-            redirect_uri="https://prasadam-project.onrender.com/google/callback"
+            redirect_uri = redirect_uri
         )
         auth_url, state = flow.authorization_url(prompt='select_account', access_type='offline', include_granted_scopes='true')
         session['state'] = state
@@ -232,6 +234,8 @@ def login_google():
 
 @app.route('/google/callback')
 def callback():
+    base_url = os.environ.get('BASE_URL', 'http://localhost:5000')
+    redirect_uri = f'{base_url}/google/callback'
     try:
         if request.args.get('__debugger__') == 'yes':
             return '', 204
@@ -243,7 +247,7 @@ def callback():
         flow = Flow.from_client_secrets_file(
             GOOGLE_CLIENT_SECRETS_FILE,
             scopes=["https://www.googleapis.com/auth/userinfo.email", "openid"],
-            redirect_uri='https://prasadam-project.onrender.com/google/callback'
+            redirect_uri=redirect_uri
         )
         flow.state = session.get('state')
         flow.fetch_token(authorization_response=authorization_response)
