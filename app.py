@@ -249,6 +249,7 @@ def callback():
             scopes=["https://www.googleapis.com/auth/userinfo.email", "openid"],
             redirect_uri=redirect_uri
         )
+
         flow.state = session.get('state')
         flow.fetch_token(authorization_response=authorization_response)
         session.pop('state', None)
