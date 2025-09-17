@@ -220,7 +220,7 @@ def login_google():
         flow = Flow.from_client_secrets_file(
             GOOGLE_CLIENT_SECRETS_FILE,
             scopes=["https://www.googleapis.com/auth/userinfo.email", "openid"],
-            redirect_uri="http://localhost:5000/google/callback"
+            redirect_uri="https://prasadam-project.onrender.com/google/callback"
         )
         auth_url, state = flow.authorization_url(prompt='select_account', access_type='offline', include_granted_scopes='true')
         session['state'] = state
@@ -243,7 +243,7 @@ def callback():
         flow = Flow.from_client_secrets_file(
             GOOGLE_CLIENT_SECRETS_FILE,
             scopes=["https://www.googleapis.com/auth/userinfo.email", "openid"],
-            redirect_uri='http://localhost:5000/google/callback'
+            redirect_uri='https://prasadam-project.onrender.com/google/callback'
         )
         flow.state = session.get('state')
         flow.fetch_token(authorization_response=authorization_response)
