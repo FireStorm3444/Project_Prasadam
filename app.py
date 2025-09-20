@@ -44,6 +44,8 @@ def send_otp(email, otp):
     api_key = os.environ.get("MAILJET_API_KEY")
     api_secret = os.environ.get("MAILJET_SECRET_KEY")
 
+    print(f"DEBUG: Using API Key: '{api_key}' and Secret Key: '{api_secret}'")
+
     if not api_key or not api_secret:
         print("Mailjet API keys not configured.")
         return False
