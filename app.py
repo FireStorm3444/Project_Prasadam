@@ -3,6 +3,7 @@ import random
 import uuid
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
+from werkzeug.middleware.proxy_fix import ProxyFix
 import firebase_admin
 from dotenv import load_dotenv
 from firebase_admin import credentials, firestore
@@ -21,6 +22,7 @@ load_dotenv()
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 app.secret_key = os.environ.get('FLASK_SECRET', 'dev_secret')
 
 # Google OAuth client file
