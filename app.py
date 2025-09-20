@@ -224,11 +224,11 @@ def login():
                 otp = str(random.randint(100000, 999999))
                 otp_expiry = datetime.now() + timedelta(minutes=10)
                 user_doc.reference.update({'otp': otp, 'otp_expiry': otp_expiry})
-                # if send_otp(email, otp):
-                session['email'] = email
-                return redirect(url_for('otp'))
-                # else:
-                #     flash('Failed to send OTP')
+                if send_otp(email, otp):
+                    session['email'] = email
+                    return redirect(url_for('otp'))
+                else:
+                    flash('Failed to send OTP')
             else:
                 flash('Invalid credentials')
         except Exception as e:
@@ -301,7 +301,7 @@ def callback():
             otp = str(random.randint(100000, 999999))
             otp_expiry = datetime.now() + timedelta(minutes=10)
             user_doc.reference.update({'otp': otp, 'otp_expiry': otp_expiry})
-            # send_otp(session['email'], otp)
+            send_otp(session['email'], otp)
             return redirect(url_for('otp'))
         else:
             # New Google users go to registration page
@@ -377,8 +377,8 @@ def otp():
         session['user_id'] = user_doc.id
         session['role'] = normalize_role(user.get('role', 'donor'))
         session['user_name'] = user.get('user_name', user.get('name', session.get('user_name')))
-        # if user.get('otp') == entered and user.get('otp_expiry') and datetime.now() < user['otp_expiry'].replace(tzinfo=None):
-        if True:
+        if user.get('otp') == entered and user.get('otp_expiry') and datetime.now() < user['otp_expiry'].replace(tzinfo=None):
+        # if True:
             user_doc.reference.update({'otp': None, 'otp_expiry': None})
             flash('Login successful')
 
