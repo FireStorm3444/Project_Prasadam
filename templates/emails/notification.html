@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prasadam Notification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/emails/email-styles.css') }}">
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>Prasadam</h1>
+            <p>Food Sharing Platform</p>
+        </div>
+
+        <!-- Content -->
+        <div class="email-content">
+            <div class="message-content">{{ message_content }}</div>
+
+            <p class="mb-0">
+                If you have any questions, please don't hesitate to contact us.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <p>
+                This is an automated message from Prasadam
+            </p>
+            <p>
+                © {{ current_year }} Prasadam. All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

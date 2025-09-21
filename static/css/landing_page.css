@@ -1,5 +1,5 @@
 /* landing_page.css — minimal overrides, inherit base styles from global.css */
-@import url('global.css');
+@import url('css/global.css');
 
 :root {
   --brand: #e74c3c;

@@ -1,0 +1,12 @@
+Hello,
+
+{{ message_content }}
+
+If you have any questions, please don't hesitate to contact us.
+
+Best regards,
+The Prasadam Team
+
+---
+This is an automated message from Prasadam.
+© {{ current_year }} Prasadam. All rights reserved.

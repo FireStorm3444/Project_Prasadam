@@ -40,29 +40,75 @@ except Exception as e:
 
 # Small helpers
 def send_otp(email, otp):
-    """Sends an OTP using the Mailjet API."""
+    """Sends an OTP or account message using the Mailjet API with professional templates.
+    - If `otp` is a 6-digit numeric string, sends a verification code email.
+    - If `otp` is a short token, sends a temporary password email.
+    - Otherwise, sends a general notification email.
+    Returns True on success, False otherwise.
+    """
     api_key = os.environ.get("MAILJET_API_KEY")
     api_secret = os.environ.get("MAILJET_SECRET_KEY")
-
-    print(f"DEBUG: Using API Key: '{api_key}' and Secret Key: '{api_secret}'")
 
     if not api_key or not api_secret:
         print("Mailjet API keys not configured.")
         return False
 
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-
-    # NOTE: You must verify a sender email/domain in your Mailjet account.
-    # Replace 'your-verified-sender@yourdomain.com' with an email you have verified in Mailjet.
-    # For now, you can use the same email you are sending from.
     sender_email = "noreply@prasadam.in.net"
 
+    # Determine message type and content
+    content = str(otp) if otp is not None else ""
+    is_numeric_otp = content.isdigit() and len(content) == 6
+    is_temp_password = (not is_numeric_otp) and (len(content) <= 20) and (" " not in content)
+
+    current_year = datetime.now().year
+
+    # Template variables for rendering
+    template_vars = {
+        'current_year': current_year
+    }
+
+    if is_numeric_otp:
+        # Professional OTP verification email
+        subject = "Your Prasadam Security Code"
+        template_vars['otp_code'] = content
+
+        # Render templates
+        text_body = render_template('emails/otp_verification.txt', **template_vars)
+        html_body = render_template('emails/otp_verification.html', **template_vars)
+        custom_id = "prasadam_otp_verification"
+
+    elif is_temp_password:
+        # Professional temporary password email
+        subject = "Welcome to Prasadam - Account Setup"
+        template_vars['temp_password'] = content
+
+        # Render templates
+        text_body = render_template('emails/temp_password.txt', **template_vars)
+        html_body = render_template('emails/temp_password.html', **template_vars)
+        custom_id = "prasadam_temp_password"
+
+    else:
+        # Professional general notification email
+        body_content = content.strip() or "Notification from Prasadam"
+        subject = "Welcome to Prasadam - Account Information" if "temporary" in body_content.lower() else "Important Information from Prasadam"
+
+        # Escape HTML characters for security
+        safe_content = body_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+        template_vars['message_content'] = safe_content
+
+        # Render templates
+        text_body = render_template('emails/notification.txt', message_content=body_content, current_year=current_year)
+        html_body = render_template('emails/notification.html', **template_vars)
+        custom_id = "prasadam_notification"
+
+    # Prepare email data
     data = {
         'Messages': [
             {
                 "From": {
                     "Email": sender_email,
-                    "Name": "Prasadam - Login"
+                    "Name": "Prasadam Security Team"
                 },
                 "To": [
                     {
@@ -70,9 +116,10 @@ def send_otp(email, otp):
                         "Name": "User"
                     }
                 ],
-                "Subject": "Your Prasadam Verification Code",
-                "TextPart": f"Your verification code is: {otp}",
-                "HTMLPart": f"<h3>Your verification code is: {otp}</h3>"
+                "Subject": subject,
+                "TextPart": text_body,
+                "HTMLPart": html_body,
+                "CustomID": custom_id
             }
         ]
     }
@@ -80,13 +127,13 @@ def send_otp(email, otp):
     try:
         result = mailjet.send.create(data=data)
         if result.status_code == 200:
-            print("OTP email sent successfully via Mailjet.")
+            print("Email sent successfully via Mailjet.")
             return True
         else:
-            print(f"Mailjet error: {result.status_code} - {result.json()}")
+            print(f"Mailjet error: {result.status_code}")
             return False
     except Exception as e:
-        print(f"An exception occurred with Mailjet: {e}")
+        print(f"Email sending failed: {e}")
         return False
 
 

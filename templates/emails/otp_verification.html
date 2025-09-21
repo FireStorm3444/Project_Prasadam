@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prasadam Security Code</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/emails/email-styles.css') }}">
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>Prasadam</h1>
+            <p>Food Sharing Platform</p>
+        </div>
+
+        <!-- Content -->
+        <div class="email-content">
+            <h2>Security Verification</h2>
+
+            <p>
+                We received a request to sign in to your Prasadam account. Please use the verification code below to complete your sign-in:
+            </p>
+
+            <!-- OTP Code Box -->
+            <div class="code-container">
+                <div class="code-box">
+                    <div class="code-label">Verification Code</div>
+                    <div class="code-value">{{ otp_code }}</div>
+                </div>
+            </div>
+
+            <!-- Security Info -->
+            <div class="alert alert-warning">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                    <h3>Security Notice</h3>
+                    <p>
+                        This code expires in <strong>10 minutes</strong>. Never share this code with anyone. Prasadam will never ask for your verification code.
+                    </p>
+                </div>
+            </div>
+
+            <p class="mb-0">
+                If you didn't request this code, you can safely ignore this email. Your account remains secure.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <p>
+                This is an automated security message from Prasadam
+            </p>
+            <p>
+                © {{ current_year }} Prasadam. All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

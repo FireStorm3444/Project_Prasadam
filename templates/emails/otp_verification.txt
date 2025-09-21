@@ -1,0 +1,16 @@
+Hello,
+
+We received a request to sign in to your Prasadam account. Please use the verification code below to complete your sign-in:
+
+Verification Code: {{ otp_code }}
+
+This code will expire in 10 minutes for your security.
+
+If you didn't request this code, you can safely ignore this email. Your account remains secure.
+
+Best regards,
+The Prasadam Team
+
+---
+This is an automated security message from Prasadam.
+© {{ current_year }} Prasadam. All rights reserved.
