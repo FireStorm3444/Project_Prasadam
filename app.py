@@ -55,7 +55,7 @@ def send_otp(email, otp):
     # NOTE: You must verify a sender email/domain in your Mailjet account.
     # Replace 'your-verified-sender@yourdomain.com' with an email you have verified in Mailjet.
     # For now, you can use the same email you are sending from.
-    sender_email = "shekhar99bd@gmail.com"
+    sender_email = "noreply@prasadam.in.net"
 
     data = {
         'Messages': [
@@ -71,7 +71,8 @@ def send_otp(email, otp):
                     }
                 ],
                 "Subject": "Your Prasadam Verification Code",
-                "TextPart": f"Your verification code is: {otp}"
+                "TextPart": f"Your verification code is: {otp}",
+                "HTMLPart": f"<h3>Your verification code is: {otp}</h3>"
             }
         ]
     }
