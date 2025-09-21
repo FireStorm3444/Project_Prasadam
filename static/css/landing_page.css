@@ -1,6 +1,4 @@
 /* landing_page.css — minimal overrides, inherit base styles from global.css */
-@import url('css/global.css');
-
 :root {
   --brand: #e74c3c;
   --muted: #666;
@@ -65,12 +63,11 @@
 }
 
 .hero-media {
-  background-image: linear-gradient(120deg, rgba(231,76,60,0.06), rgba(39,174,96,0.03)), url('/static/LOGO 4.jpg');
+  background-image: url('/static/LOGO 4.jpg');
   background-size: cover;
   background-position: center;
   height: 320px;
     width: 320px;
-  border-radius: 12px;
 }
 
 /* Section cards and counters — keep lightweight overrides only */

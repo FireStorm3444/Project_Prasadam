@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Prasadam — From Surplus to Sustenance</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/landing_page.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
 </head>
 <body>
   <header class="lp-header">
@@ -124,7 +125,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   });
 });
 
-// Simple counter animation when in view
 function animateCounters(){
   const counters = document.querySelectorAll('.counter');
   const speed = 200;
