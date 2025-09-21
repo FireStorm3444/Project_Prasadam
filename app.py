@@ -62,7 +62,7 @@ def send_otp(email, otp):
             {
                 "From": {
                     "Email": sender_email,
-                    "Name": "Prasadam App"
+                    "Name": "Prasadam - Login"
                 },
                 "To": [
                     {
